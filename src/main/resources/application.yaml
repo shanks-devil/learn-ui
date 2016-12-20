@@ -11,4 +11,4 @@ spring:
         prefix: configuration
 learn:
   api:
-    user: learn-user
+    user: http://learn-user

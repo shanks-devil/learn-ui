@@ -11,22 +11,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.shanks.learn.ui.mvc.domain.User;
+import com.shanks.learn.ui.mvc.utils.PathUtils;
 
 @Service
 public class UserService {
 
 	@Value("${learn.api.user}")
-	private String userServiceName;
+	private String userApi;
+
+	private final static String LIST_USER_URI = "/learn/user";
+
+	private final static String FIND_USER_URI = "/learn/user/{id}";
 
 	@Resource
-	private RestTemplate userTemplate;
+	private RestTemplate template;
 
 	public List<User> listUser() {
-		ParameterizedTypeReference<List<User>> reference = new ParameterizedTypeReference<List<User>>() {
-		};
-		return userTemplate.exchange(
-				"http://" + userServiceName + "/learn/user", HttpMethod.GET,
-				null, reference).getBody();
+		return template.exchange(PathUtils.path(userApi, LIST_USER_URI),
+				HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<User>>() {
+				}).getBody();
+	}
+
+	public User findById(Integer id) {
+		return template.getForObject(
+				PathUtils.path(userApi, FIND_USER_URI), User.class, id);
 	}
 
 }
