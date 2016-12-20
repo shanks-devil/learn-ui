@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.shanks.learn.ui.mvc.domain.User;
-import com.shanks.learn.ui.mvc.utils.PathUtils;
 
 @Service
 public class UserService {
@@ -27,15 +26,14 @@ public class UserService {
 	private RestTemplate template;
 
 	public List<User> listUser() {
-		return template.exchange(PathUtils.path(userApi, LIST_USER_URI),
+		return template.exchange(userApi + LIST_USER_URI,
 				HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<User>>() {
 				}).getBody();
 	}
 
 	public User findById(Integer id) {
-		return template.getForObject(
-				PathUtils.path(userApi, FIND_USER_URI), User.class, id);
+		return template.getForObject(userApi + FIND_USER_URI, User.class, id);
 	}
 
 }
